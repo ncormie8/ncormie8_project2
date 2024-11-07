@@ -23,35 +23,56 @@ AreaX_bb = 0.25*np.pi*diam_bb**2
 
 # Euler method
 
-def projMotion(v_launch, ang_launch, tstep,method,AirResYN):
+def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
+    '''Takes initial velocity, launch angle, time step, solving method, and air resistance toggle as parameters.
+    Returns the horizonal range of the ball.'''
 
-    r0 = hitHeight
-    v0 = v_launch
     ang0 = ang_launch
     Tau = tstep
+    stepLim = 3000
+
+    # Setting initial position and velocity
+    r0 = [0,hitHeight] #x0, y0
+    v0 = [np.cos(ang0*np.pi/180)*v_launch,np.sin(ang0*np.pi/180)*v_launch] #Vx0, Vy0
+    
+    # Setting initial values of time steppable r and v to initial values
+    r = r0
+    v = v0
+
+    # x initialization
+    xPos = np.zeros(stepLim)
+
+    # y initialization
+    yPos = np.zeros(stepLim)
+    yPos[0] = hitHeight
+
 
     if method == 'Euler':
         # Perform numerical analysis with Euler's Method
-        if AirResYN == 'Yes':
+        if AirResYN is True:
             # Do calculations with Air resistance
+            return 'end value for range'
+        
         else:
             # Do calculations w/o Air resistance
+            return 'end value for range'
     
     elif method == 'Euler-Cromer':
         # Perform numerical analysis with Euler-Cromer Method
-        if AirResYN == 'Yes':
+        if AirResYN is True:
             # Do calculations with Air resistance
+            return 'end value for range'
         else:
             # Do calculations w/o Air resistance
+            return 'end value for range'
     
     
     elif method == 'Midpoint':
         # Perform numerical analysis with Midpoint Method
-        
-        if AirResYN == 'Yes':
+        if AirResYN is True:
             # Do calculations with Air resistance
+            return 'end value for range'
         else:
             # Do calculations w/o Air resistance
-
-    return #array for plotting
+            return 'end value for range'
     
