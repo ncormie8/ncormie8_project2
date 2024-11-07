@@ -60,17 +60,16 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
                 yPos[i] = r[1] # logging y position data
                 t = i*tau      # setting the time at this step
 
-                acc = airConst*np.abs(v)*v   # air resistance (only acc on x)
-                acc[1] = acc - acc_g         # air res and gravity (acc on y)
+                acc[0] = airConst*np.abs(v[0])*v[0]           # air resistance (only acc on x)
+                acc[1] = airConst*np.abs(v[1])*v[1] - acc_g   # air res and gravity (acc on y)
                 
                 r = r + tau*v       # Euler's method step for position
                 v = v + tau*acc     # Euler's method step for velocity
 
                 # Loop breaking condition
                 if r[1]<=0:
-                    range = r[0]
                     break
-            return 'The ball traveled ',range,' meters.'
+            return 'The ball traveled ',r[0],' meters.'
         
         else:
             # Do calculations w/o Air resistance
@@ -94,4 +93,5 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
         else:
             # Do calculations w/o Air resistance
             return 'end value for range'
-    
+
+projMotion(160.934,45,0.001,'Euler',True)
