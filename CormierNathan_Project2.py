@@ -55,11 +55,8 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
             # Do calculations with Air resistance
             range = 0
             acc = np.zeros(2)
-            for i in range(stepLim):
-
-                xPos[i] = r[0] # logging x position data
-                yPos[i] = r[1] # logging y position data
-                
+            
+            while r[1]>=0.01:
                 # Setting tau as an element of an array for multiplication with v and acc
                 # in Euler steps
                 tauX = [tau]
@@ -69,11 +66,9 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
                 
                 r = r + tauX*v       # Euler's method step for position
                 v = v + tauX*acc     # Euler's method step for velocity
-
+                print(r[1])
                 # Loop breaking condition (if y pos is <= 0, report final x pos as range)
-                if r[1]<=0:
-                    range = r[0]
-                    break
+
             return 'The ball traveled ',r[0],' meters.'
         
         else:
