@@ -1,5 +1,6 @@
 import numpy as np
 import scipy as sp
+import time
 
 # Parameters
 m_bb = 0.145 # baseball mass [kg]
@@ -47,7 +48,7 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
     yPos[0] = hitHeight
 
     # calculating the air constant for later use in a formula
-    airConst = (-0.5)*dragC*atmDens*AreaX_bb/m_bb
+    airConst = -0.5*dragC*atmDens*AreaX_bb/m_bb
 
     if method == 'Euler':
         # Perform numerical analysis with Euler's Method
@@ -57,14 +58,16 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
             acc = np.zeros(2)
             i = 1
             while r[1]>=1:
-                acc[0] = airConst*np.abs(v[0])*v[0]           # air resistance (only acc on x)
-                acc[1] = airConst*np.abs(v[1])*v[1] - acc_g   # air res and gravity (acc on y)
+                acc[0] = airConst*abs(v[0])*v[0]           # air resistance (only acc on x)
+                acc[1] = airConst*abs(v[1])*v[1] - acc_g   # air res and gravity (acc on y)
 
                 r[0] = r[0] + tau*v[0]       # Euler's method step for position in x
                 r[1] = r[1] + tau*v[1]       # Euler's method step for position in y
                 v[0] = v[0] + tau*acc[0]     # Euler's method step for velocity in x
                 v[1] = v[1] + tau*acc[1]     # Euler's method step for velocity in y
-                print(r[1])
+                print(v[1]) #increasing
+                print(acc[1]) #decreasing
+                time.sleep(2)
                
 
             print('The ball traveled ',r[0],' meters.')
