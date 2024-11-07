@@ -65,7 +65,12 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
                 
                 r = r + tau*v       # Euler's method step for position
                 v = v + tau*acc     # Euler's method step for velocity
-            return 'end value for range'
+
+                # Loop breaking condition
+                if r[1]<=0:
+                    range = r[0]
+                    break
+            return 'The ball traveled ',range,' meters.'
         
         else:
             # Do calculations w/o Air resistance
