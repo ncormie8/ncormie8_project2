@@ -56,7 +56,7 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
             range = 0
             acc = np.zeros(2)
             i = 1
-            while r[1]>=0:
+            while r[1]>=1:
                 acc[0] = airConst*np.abs(v[0])*v[0]           # air resistance (only acc on x)
                 acc[1] = airConst*np.abs(v[1])*v[1] - acc_g   # air res and gravity (acc on y)
 
@@ -64,9 +64,8 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
                 r[1] = r[1] + tau*v[1]       # Euler's method step for position in y
                 v[0] = v[0] + tau*acc[0]     # Euler's method step for velocity in x
                 v[1] = v[1] + tau*acc[1]     # Euler's method step for velocity in y
-                xPos[i] = r[0]
-                yPos[i] = r[1]
-                i+=1
+                print(r[1])
+               
 
             print('The ball traveled ',r[0],' meters.')
             return r[0]
@@ -94,4 +93,4 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
             # Do calculations w/o Air resistance
             return 'end value for range'
 
-projMotion(160.934,45,0.1,'Euler',True)
+projMotion(50,45,0.5,'Euler',True)
