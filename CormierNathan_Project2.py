@@ -40,10 +40,10 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
     v = v0
 
     # x initialization
-    xPos = np.zeros(stepLim)
+    xPos = np.empty(stepLim)
 
     # y initialization
-    yPos = np.zeros(stepLim)
+    yPos = np.empty(stepLim)
     yPos[0] = hitHeight
 
     # calculating the air constant for later use in a formula
@@ -53,21 +53,26 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
         # Perform numerical analysis with Euler's Method
         if AirResYN is True:
             # Do calculations with Air resistance
+            range = 0
             acc = np.zeros(2)
             for i in range(stepLim):
 
                 xPos[i] = r[0] # logging x position data
                 yPos[i] = r[1] # logging y position data
-                t = i*tau      # setting the time at this step
+                
+                # Setting tau as an element of an array for multiplication with v and acc
+                # in Euler steps
+                tauX = [tau]
 
                 acc[0] = airConst*np.abs(v[0])*v[0]           # air resistance (only acc on x)
                 acc[1] = airConst*np.abs(v[1])*v[1] - acc_g   # air res and gravity (acc on y)
                 
-                r = r + tau*v       # Euler's method step for position
-                v = v + tau*acc     # Euler's method step for velocity
+                r = r + tauX*v       # Euler's method step for position
+                v = v + tauX*acc     # Euler's method step for velocity
 
-                # Loop breaking condition
+                # Loop breaking condition (if y pos is <= 0, report final x pos as range)
                 if r[1]<=0:
+                    range = r[0]
                     break
             return 'The ball traveled ',r[0],' meters.'
         
