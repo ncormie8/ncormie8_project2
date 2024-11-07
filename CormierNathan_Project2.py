@@ -28,7 +28,7 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
     Returns the horizonal range of the ball.'''
 
     ang0 = ang_launch
-    Tau = tstep
+    tau = tstep
     stepLim = 3000
 
     # Setting initial position and velocity
@@ -46,11 +46,25 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
     yPos = np.zeros(stepLim)
     yPos[0] = hitHeight
 
+    # calculating the air constant for later use in a formula
+    airConst = (-0.5)*dragC*atmDens*AreaX_bb/m_bb
 
     if method == 'Euler':
         # Perform numerical analysis with Euler's Method
         if AirResYN is True:
             # Do calculations with Air resistance
+            acc = np.zeros(2)
+            for i in range(stepLim):
+
+                xPos[i] = r[0] # logging x position data
+                yPos[i] = r[1] # logging y position data
+                t = i*tau      # setting the time at this step
+
+                acc = airConst*np.abs(v)*v   # air resistance (only acc on x)
+                acc[1] = acc - acc_g         # air res and gravity (acc on y)
+                
+                r = r + tau*v       # Euler's method step for position
+                v = v + tau*acc     # Euler's method step for velocity
             return 'end value for range'
         
         else:
