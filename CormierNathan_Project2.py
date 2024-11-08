@@ -36,10 +36,13 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
     r0 = [0,hitHeight] #x0, y0
     v0 = [np.cos(ang0*np.pi/180)*v_launch,np.sin(ang0*np.pi/180)*v_launch] #Vx0, Vy0
     
+
     # Setting initial values of time steppable r and v to initial values
     r = r0
     v = v0
 
+    print(r)
+    print(v)
     # x initialization
     xPos = np.empty(stepLim)
 
@@ -59,15 +62,16 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
             i = 1
             while r[1]>=1:
                 acc[0] = airConst*abs(v[0])*v[0]           # air resistance (only acc on x)
-                acc[1] = airConst*abs(v[1])*v[1] - acc_g   # air res and gravity (acc on y)
+                acc[1] = airConst*abs(v[1])*v[1] + acc_g   # air res and gravity (acc on y)
 
                 r[0] = r[0] + tau*v[0]       # Euler's method step for position in x
                 r[1] = r[1] + tau*v[1]       # Euler's method step for position in y
                 v[0] = v[0] + tau*acc[0]     # Euler's method step for velocity in x
                 v[1] = v[1] + tau*acc[1]     # Euler's method step for velocity in y
-                print(v[1]) #increasing
-                print(acc[1]) #decreasing
-                time.sleep(2)
+                print(v[1])
+                time.sleep(0.5)
+                
+                
                
 
             print('The ball traveled ',r[0],' meters.')
