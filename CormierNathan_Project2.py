@@ -212,8 +212,18 @@ exitspd_stdev_ms = 6.7056
 ang0_mean_deg = 45
 ang0_stdev_deg = 10
 
-# generating array of random exit speeds and launch angles
-rand_v0 = np.random.normal(exitspd_mean_ms,exitspd_stdev_ms)
-rand_ang0 = np.random.normal(ang0_mean_deg,ang0_stdev_deg)
+# setting size of output random value arrays
+randSize = 10
 
+# generating array of random exit speeds and launch angles for testing
+rand_v0 = np.random.normal(exitspd_mean_ms,exitspd_stdev_ms,randSize)
+rand_ang0 = np.random.normal(ang0_mean_deg,ang0_stdev_deg,randSize)
 
+# initializing empty array to be filled with range values
+range_out = np.zeros(10)
+a,b,c = 1,2,3
+
+for j in range(randSize-1):
+    range_out[j], a, b, c, = projMotion(rand_v0[j],rand_ang0[j],0.01,'Midpoint',True)
+
+print(range_out)
