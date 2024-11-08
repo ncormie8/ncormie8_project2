@@ -57,7 +57,6 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
         # Perform numerical analysis with Euler's Method
         if AirResYN is True:
             # Do calculations with Air resistance
-            range = 0
             acc = np.zeros(2)
             i = 1
             while r[1]>=0:
@@ -76,7 +75,6 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
         
         elif AirResYN is False:
             # Do calculations w/o Air resistance
-            range = 0
             i = 1
             while r[1]>=0:
                 r[0] = r[0] + tau*v[0]       # Euler's method step for position in x
@@ -98,8 +96,8 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
         # Perform numerical analysis with Euler-Cromers Method
         if AirResYN is True:
             # Do calculations with Air resistance
-            range = 0
             acc = np.zeros(2)
+            i = 1
             while r[1]>=0:
                 acc[0] = airConst*abs(v[0])*v[0]           # air resistance (only acc on x)
                 acc[1] = airConst*abs(v[1])*v[1] + acc_g   # air res and gravity (acc on y)
@@ -108,18 +106,24 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
                 v[1] = v[1] + tau*acc[1]     # Euler-Cromer step for velocity in y (same as Euler's)
                 r[0] = r[0] + tau*v[0]       # Euler-Cromer step for position in x (now using updated vx to find rx)
                 r[1] = r[1] + tau*v[1]       # Euler-Cromer step for position in y (now using updated vy to find ry)
+                xPos[i] = r[0]    # saving x pos at each step for plotting
+                yPos[i] = r[1]    # saving y pos at each step for plotting
+                i +=1
             
-            return r[0]
+            return r[0],i-1,xPos,yPos
         
         elif AirResYN is False:
             # Do calculations w/o Air resistance
-            range = 0
+            i = 1
             while r[1]>=0:
                 v[1] = v[1] + tau*acc_g      # Euler-Cromer step for velocity in y (same as Euler's)
                 r[0] = r[0] + tau*v[0]       # Euler-Cromer step for position in x
                 r[1] = r[1] + tau*v[1]       # Euler-Cromer step for position in y (now using updated vy to find ry)
+                xPos[i] = r[0]    # saving x pos at each step for plotting
+                yPos[i] = r[1]    # saving y pos at each step for plotting
+                i +=1
 
-            return r[0]
+            return r[0],i-1,xPos,yPos
         
         else:
             return 'Input Variable for AirResYN was not True or False. Please try again.'
@@ -131,8 +135,8 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
         # Perform numerical analysis with Midpoint Method
         if AirResYN is True:
             # Do calculations with Air resistance
-            range = 0
             acc = np.zeros(2)
+            i = 1
             while r[1]>=0:
                 acc[0] = airConst*abs(v[0])*v[0]                # air resistance (only acc on x)
                 acc[1] = airConst*abs(v[1])*v[1] + acc_g        # air res and gravity (acc on y)
@@ -141,39 +145,51 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
                 r[1] = r[1] + tau*v[1] + 0.5*acc[1]*(tau**2)    # Midpoint step for position in y (now using vy and ay to find ry)
                 v[0] = v[0] + tau*acc[0]                        # Midpoint step for velocity in x (same as Euler's)
                 v[1] = v[1] + tau*acc[1]                        # Midpoint step for velocity in y (same as Euler's)
+                xPos[i] = r[0]    # saving x pos at each step for plotting
+                yPos[i] = r[1]    # saving y pos at each step for plotting
+                i +=1
                 
-            return r[0]
+            return r[0],i-1,xPos,yPos
         
         elif AirResYN is False:
             # Do calculations w/o Air resistance
-            range = 0
+            i = 1
             while r[1]>=0:
                 r[0] = r[0] + tau*v[0]                        # Midpoint step for position in x (same as Eulers)
                 r[1] = r[1] + tau*v[1] +0.5*acc_g*(tau**2)    # Midpoint step for position in y (now using vy and ay to find ry)
                 v[1] = v[1] + tau*acc_g                       # Midpoint step for velocity in y (same as Euler's)
+                xPos[i] = r[0]    # saving x pos at each step for plotting
+                yPos[i] = r[1]    # saving y pos at each step for plotting
+                i +=1
                 
-            return r[0]
+            return r[0],i-1,xPos,yPos
         
         else:
             return 'Input Variable for AirResYN was not True or False. Please try again.'
 
-# getting range, x positions, and y positions for recreation of Fig 2.3
-rngE, stepsE, xplotE, yplotE = projMotion(50,45,0.1,'Euler',True)     # Euler with air resistance
+# getting range, x positions, and y positions for recreation of Fig 2.3 for Euler Theory, Euler, Euler-Cromer, and Midpoint methods
 rngT, stepsT, xplotT, yplotT = projMotion(50,45,0.1,'Euler',False)    # Theory (No air resistance)
+rngE, stepsE, xplotE, yplotE = projMotion(50,45,0.1,'Euler',True)     # Euler with air resistance
+rngEC, stepsEC, xplotEC, yplotEC = projMotion(50,45,0.1,'Euler-Cromer',True)     # Euler-Cromer with air resistance
+rngMP, stepsMP, xplotMP, yplotMP = projMotion(50,45,0.1,'Midpoint',True)     # Midpoint with air resistance
 
-# setting the plotting arrays to the values recorded for the Euler Method with AirRes and Theoretical Euler (no air res) 
-xPE = xplotE[0:stepsE]
-yPE = yplotE[0:stepsE]
-xPT = xplotT[0:stepsT]
-yPT = yplotT[0:stepsT]
+# setting the plotting arrays to the values recorded for: 
+xPT = xplotT[0:stepsT]     # Theoretical Euler xP
+yPT = yplotT[0:stepsT]     # Theoretical Euler yP
+xPE = xplotE[0:stepsE]     # Euler xP
+yPE = yplotE[0:stepsE]     # Euler yP
+xPEC = xplotEC[0:stepsEC]  # Euler-Cromer xP
+yPEC = yplotEC[0:stepsEC]  # Euler-Cromer yP
+xPMP = xplotMP[0:stepsMP]  # Midpoint xP
+yPMP = yplotMP[0:stepsMP]  # Midpoint yP
 
 # setting axis boundary lines as shown in figure 2.3
 xG = np.array([0.,xplotT[stepsT]])
 yG = np.array([0.,0.])
 
 # marking ground for plotting
-plt.plot(xPE,yPE,'+',xPT,yPT,'-',xG,yG,'r-')
-plt.legend(['Euler method (AR)','Theory (No AR)'])
+plt.plot(xPT,yPT,'-',xPE,yPE,'+',xPEC,yPEC,'<',xPMP,yPMP,'1',xG,yG,'r-')
+plt.legend(['Theory (No AR)','Euler method (AR)','Euler-Cromer method (AR)','Midpoint method (AR)'])
 plt.xlabel('Range (m)')
 plt.ylabel('Height (m)')
 plt.title('Projectile Motion')
