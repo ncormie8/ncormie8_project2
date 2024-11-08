@@ -76,7 +76,7 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
             while r[1]>=0:
                 r[0] = r[0] + tau*v[0]       # Euler's method step for position in x
                 r[1] = r[1] + tau*v[1]       # Euler's method step for position in y
-                v[1] = v[1] + tau*acc_g    # Euler's method step for velocity in y
+                v[1] = v[1] + tau*acc_g      # Euler's method step for velocity in y
             print('The ball traveled ',r[0],' meters.')
             return r[0]
         
@@ -84,16 +84,38 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
             return 'Input Variable for AirResYN was not True or False. Please try again.'
     
 
-    
+
     ######## Euler-Cromer method section
     elif method == 'Euler-Cromer':
-        # Perform numerical analysis with Euler-Cromer Method
+        # Perform numerical analysis with Euler-Cromers Method
         if AirResYN is True:
             # Do calculations with Air resistance
-            return 'end value for range'
-        else:
+            range = 0
+            acc = np.zeros(2)
+            while r[1]>=0:
+                acc[0] = airConst*abs(v[0])*v[0]           # air resistance (only acc on x)
+                acc[1] = airConst*abs(v[1])*v[1] + acc_g   # air res and gravity (acc on y)
+
+                v[0] = v[0] + tau*acc[0]     # Euler-Cromer step for velocity in x (same as Euler's)
+                v[1] = v[1] + tau*acc[1]     # Euler-Cromer step for velocity in y (same as Euler's)
+                r[0] = r[0] + tau*v[0]       # Euler-Cromer step for position in x (now using updated vx to find rx)
+                r[1] = r[1] + tau*v[1]       # Euler-Cromer step for position in y (now using updated vy to find ry)
+                
+            print('The ball traveled ',r[0],' meters.')
+            return r[0]
+        
+        elif AirResYN is False:
             # Do calculations w/o Air resistance
-            return 'end value for range'
+            range = 0
+            while r[1]>=0:
+                v[1] = v[1] + tau*acc_g      # Euler-Cromer step for velocity in y (same as Euler's)
+                r[0] = r[0] + tau*v[0]       # Euler-Cromer step for position in x
+                r[1] = r[1] + tau*v[1]       # Euler-Cromer step for position in y (now using updated vy to find ry)
+            print('The ball traveled ',r[0],' meters.')
+            return r[0]
+        
+        else:
+            return 'Input Variable for AirResYN was not True or False. Please try again.'
     
     
     elif method == 'Midpoint':
