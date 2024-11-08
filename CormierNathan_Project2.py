@@ -165,15 +165,16 @@ rngT, stepsT, xplotT, yplotT = projMotion(50,45,0.1,'Euler',False)    # Theory (
 xPE = xplotE[0:stepsE]
 yPE = yplotE[0:stepsE]
 xPT = xplotT[0:stepsT]
-yPT = xplotT[0:stepsT]
+yPT = yplotT[0:stepsT]
 
 # setting axis boundary lines as shown in figure 2.3
-xG = np.array([0.,xplotE[stepsE]])
+xG = np.array([0.,xplotT[stepsT]])
 yG = np.array([0.,0.])
 
 # marking ground for plotting
 plt.plot(xPE,yPE,'+',xPT,yPT,'-',xG,yG,'r-')
-plt.legend('Euler method (AR)','Theory (No AR)')
+plt.legend(['Euler method (AR)','Theory (No AR)'])
 plt.xlabel('Range (m)')
 plt.ylabel('Height (m)')
 plt.title('Projectile Motion')
+plt.show()
