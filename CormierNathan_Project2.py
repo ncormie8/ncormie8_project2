@@ -155,12 +155,22 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
             return 'Input Variable for AirResYN was not True or False. Please try again.'
 
 # getting range, x positions, and y positions for recreation of Fig 2.3
-rng, steps, xplot, yplot = projMotion(50,45,0.1,'Euler',True)
-xP = xplot[0:steps]
-yP = yplot[0:steps]
+rngE, stepsE, xplotE, yplotE = projMotion(50,45,0.1,'Euler',True)     # Euler with air resistance
+rngT, stepsT, xplotT, yplotT = projMotion(50,45,0.1,'Euler',False)    # Theory (No air resistance)
 
-# marking ground for plotting
-xG = np.array([0.,xplot[steps]])
+# setting the plotting arrays to the values recorded for the Euler Method with AirRes and Theoretical Euler (no air res) 
+xPE = xplotE[0:stepsE]
+yPE = yplotE[0:stepsE]
+xPT = xplotT[0:stepsT]
+yPT = xplotT[0:stepsT]
+
+# setting axis boundary lines as shown in figure 2.3
+xG = np.array([0.,xplotE[stepsE]])
 yG = np.array([0.,0.])
 
-plt.plot()
+# marking ground for plotting
+plt.plot(xPE,yPE,'+',xPT,yPT,'-',xG,yG,'r-')
+plt.legend('Euler method (AR)','Theory (No AR)')
+plt.xlabel('Range (m)')
+plt.ylabel('Height (m)')
+plt.title('Projectile Motion')
