@@ -77,13 +77,16 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
         elif AirResYN is False:
             # Do calculations w/o Air resistance
             range = 0
+            i = 1
             while r[1]>=0:
                 r[0] = r[0] + tau*v[0]       # Euler's method step for position in x
                 r[1] = r[1] + tau*v[1]       # Euler's method step for position in y
                 v[1] = v[1] + tau*acc_g      # Euler's method step for velocity in y
+                xPos[i] = r[0]    # saving x pos at each step for plotting
+                yPos[i] = r[1]    # saving y pos at each step for plotting
+                i +=1
 
-
-            return r[0]
+            return r[0],i-1,xPos,yPos
         
         else:
             return 'Input Variable for AirResYN was not True or False. Please try again.'
