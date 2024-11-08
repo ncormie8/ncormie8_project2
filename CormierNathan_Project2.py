@@ -196,7 +196,6 @@ plt.title('Projectile Motion')
 plt.show()
 
 
-
 # Part 2
 
 # Determine the AB/HR-ratio for the proposed RDH. To do this, run your projectile program for a number of 
@@ -206,3 +205,15 @@ plt.show()
 
 # You can assume any projectile with a range of 400 feet or greater is a home run as this is a typical 
 # distance between home plate and the centre field.
+
+# defining mean exit speed, stdev of exit speed, mean launch angle, and stdev of launch angle
+exitspd_mean_ms = 44.704
+exitspd_stdev_ms = 6.7056
+ang0_mean_deg = 45
+ang0_stdev_deg = 10
+
+# generating array of random exit speeds and launch angles
+rand_v0 = np.random.normal(exitspd_mean_ms,exitspd_stdev_ms)
+rand_ang0 = np.random.normal(ang0_mean_deg,ang0_stdev_deg)
+
+
