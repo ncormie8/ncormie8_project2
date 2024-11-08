@@ -194,3 +194,15 @@ plt.xlabel('Range (m)')
 plt.ylabel('Height (m)')
 plt.title('Projectile Motion')
 plt.show()
+
+
+
+# Part 2
+
+# Determine the AB/HR-ratio for the proposed RDH. To do this, run your projectile program for a number of 
+# simulated at-bats with the starting v and θ drawn from the random distributions given above. Remember 
+# that a normally-distributed random variable of mean μ and standard deviation σ, N(μ, σ2), can be obtained 
+# by scaling the output of the numpy.random.randn function, N(0, 1), via sigma * np.random.randn(...) + mu
+
+# You can assume any projectile with a range of 400 feet or greater is a home run as this is a typical 
+# distance between home plate and the centre field.
