@@ -71,7 +71,7 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
                 yPos[i] = r[1]    # saving y pos at each step for plotting
                 i +=1
 
-            return r[0],xPos,yPos
+            return r[0],i-1,xPos,yPos
         
         elif AirResYN is False:
             # Do calculations w/o Air resistance
@@ -154,6 +154,8 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
             return 'Input Variable for AirResYN was not True or False. Please try again.'
 
 # getting range, x positions, and y positions for recreation of Fig 2.3
-rng , xplot, yplot = projMotion(50,45,0.1,'Euler',True)
-print(np.shape(xplot))
-print(np.shape(yplot))
+rng,steps, xplot, yplot = projMotion(50,45,0.01,'Euler',True)
+print(rng)
+print(steps+1)
+print(xplot[0:steps])
+print(yplot[0:steps])
