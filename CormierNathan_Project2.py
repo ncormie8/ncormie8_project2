@@ -117,7 +117,9 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
         else:
             return 'Input Variable for AirResYN was not True or False. Please try again.'
     
+
     
+    ######## Midpoint method section
     elif method == 'Midpoint':
         # Perform numerical analysis with Midpoint Method
         if AirResYN is True:
@@ -127,4 +129,4 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
             # Do calculations w/o Air resistance
             return 'end value for range'
 
-projMotion(15,45,0.1,'Euler',True)
+projMotion(15,45,0.01,'Euler-Cromer',False)
