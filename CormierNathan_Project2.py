@@ -11,10 +11,10 @@ import time
 # air resistance; handle this with an argument to your function. Your routine should return the horizontal range of the ball (in metres).
 # Be sure to look at Figure 2.4, p33, in your textbook in relation to computing the range.
 
-# Euler method
+# Projectile motion of baseball function
 
 def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
-    '''Takes initial velocity, launch angle, time step, solving method, and air resistance toggle as parameters.
+    '''Takes initial velocity[m/s], launch angle[deg], time step[s], solving method ('Euler' or 'Euler-Cromer' or 'Midpoint'), and air resistance toggle as parameters.
     Returns the horizonal range of the ball.'''
 
     ang0 = ang_launch
@@ -44,10 +44,10 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
     r = r0
     v = v0
 
-    # x initialization
+    # x initialization for plotting
     xPos = np.empty(stepLim)
 
-    # y initialization
+    # y initialization for plotting
     yPos = np.empty(stepLim)
     yPos[0] = hitHeight
 
@@ -58,6 +58,7 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
             # Do calculations with Air resistance
             range = 0
             acc = np.zeros(2)
+            i = 1
             while r[1]>=0:
                 acc[0] = airConst*abs(v[0])*v[0]           # air resistance (only acc on x)
                 acc[1] = airConst*abs(v[1])*v[1] + acc_g   # air res and gravity (acc on y)
@@ -66,9 +67,11 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
                 r[1] = r[1] + tau*v[1]       # Euler's method step for position in y
                 v[0] = v[0] + tau*acc[0]     # Euler's method step for velocity in x
                 v[1] = v[1] + tau*acc[1]     # Euler's method step for velocity in y
-                
-            print('The ball traveled ',r[0],' meters.')
-            return r[0]
+                xPos[i] = r[0]    # saving x pos at each step for plotting
+                yPos[i] = r[1]    # saving y pos at each step for plotting
+                i +=1
+
+            return r[0],xPos,yPos
         
         elif AirResYN is False:
             # Do calculations w/o Air resistance
@@ -77,8 +80,8 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
                 r[0] = r[0] + tau*v[0]       # Euler's method step for position in x
                 r[1] = r[1] + tau*v[1]       # Euler's method step for position in y
                 v[1] = v[1] + tau*acc_g      # Euler's method step for velocity in y
-                
-            print('The ball traveled ',r[0],' meters.')
+
+
             return r[0]
         
         else:
@@ -102,7 +105,6 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
                 r[0] = r[0] + tau*v[0]       # Euler-Cromer step for position in x (now using updated vx to find rx)
                 r[1] = r[1] + tau*v[1]       # Euler-Cromer step for position in y (now using updated vy to find ry)
             
-            print('The ball traveled ',r[0],' meters.')
             return r[0]
         
         elif AirResYN is False:
@@ -113,7 +115,6 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
                 r[0] = r[0] + tau*v[0]       # Euler-Cromer step for position in x
                 r[1] = r[1] + tau*v[1]       # Euler-Cromer step for position in y (now using updated vy to find ry)
 
-            print('The ball traveled ',r[0],' meters.')
             return r[0]
         
         else:
@@ -129,29 +130,30 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
             range = 0
             acc = np.zeros(2)
             while r[1]>=0:
-                acc[0] = airConst*abs(v[0])*v[0]           # air resistance (only acc on x)
-                acc[1] = airConst*abs(v[1])*v[1] + acc_g   # air res and gravity (acc on y)
+                acc[0] = airConst*abs(v[0])*v[0]                # air resistance (only acc on x)
+                acc[1] = airConst*abs(v[1])*v[1] + acc_g        # air res and gravity (acc on y)
 
-                r[0] = r[0] + tau*v[0] + 0.5*acc[0]*(tau**2)   # Midpoint step for position in x (now using vx and ax to find rx)
-                r[1] = r[1] + tau*v[1] + 0.5*acc[1]*(tau**2)     # Midpoint step for position in y (now using vy and ay to find ry)
-                v[0] = v[0] + tau*acc[0]     # Midpoint step for velocity in x (same as Euler's)
-                v[1] = v[1] + tau*acc[1]     # Midpoint step for velocity in y (same as Euler's)
+                r[0] = r[0] + tau*v[0] + 0.5*acc[0]*(tau**2)    # Midpoint step for position in x (now using vx and ax to find rx)
+                r[1] = r[1] + tau*v[1] + 0.5*acc[1]*(tau**2)    # Midpoint step for position in y (now using vy and ay to find ry)
+                v[0] = v[0] + tau*acc[0]                        # Midpoint step for velocity in x (same as Euler's)
+                v[1] = v[1] + tau*acc[1]                        # Midpoint step for velocity in y (same as Euler's)
                 
-            print('The ball traveled ',r[0],' meters.')
             return r[0]
         
         elif AirResYN is False:
             # Do calculations w/o Air resistance
             range = 0
             while r[1]>=0:
-                r[0] = r[0] + tau*v[0]      # Euler-Cromer step for position in x
-                r[1] = r[1] + tau*v[1] +0.5*acc_g*(tau**2)    # Euler-Cromer step for position in y (now using updated vy to find ry)
-                v[1] = v[1] + tau*acc_g      # Euler-Cromer step for velocity in y (same as Euler's)
+                r[0] = r[0] + tau*v[0]                        # Midpoint step for position in x (same as Eulers)
+                r[1] = r[1] + tau*v[1] +0.5*acc_g*(tau**2)    # Midpoint step for position in y (now using vy and ay to find ry)
+                v[1] = v[1] + tau*acc_g                       # Midpoint step for velocity in y (same as Euler's)
                 
-            print('The ball traveled ',r[0],' meters.')
             return r[0]
         
         else:
             return 'Input Variable for AirResYN was not True or False. Please try again.'
 
-projMotion(15,45,0.01,'Euler-Cromer',False)
+# getting range, x positions, and y positions for recreation of Fig 2.3
+rng , xplot, yplot = projMotion(50,45,0.1,'Euler',True)
+print(np.shape(xplot))
+print(np.shape(yplot))
