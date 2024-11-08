@@ -83,6 +83,9 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
         else:
             return 'Input Variable for AirResYN was not True or False. Please try again.'
     
+
+    
+    ######## Euler-Cromer method section
     elif method == 'Euler-Cromer':
         # Perform numerical analysis with Euler-Cromer Method
         if AirResYN is True:
