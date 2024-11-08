@@ -1,5 +1,6 @@
 import numpy as np
 import scipy as sp
+from matplotlib import pyplot as plt
 import time
 
 # part 1
@@ -154,8 +155,12 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
             return 'Input Variable for AirResYN was not True or False. Please try again.'
 
 # getting range, x positions, and y positions for recreation of Fig 2.3
-rng,steps, xplot, yplot = projMotion(50,45,0.01,'Euler',True)
-print(rng)
-print(steps+1)
-print(xplot[0:steps])
-print(yplot[0:steps])
+rng, steps, xplot, yplot = projMotion(50,45,0.1,'Euler',True)
+xP = xplot[0:steps]
+yP = yplot[0:steps]
+
+# marking ground for plotting
+xG = np.array([0.,xplot[steps]])
+yG = np.array([0.,0.])
+
+plt.plot()
