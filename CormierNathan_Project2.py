@@ -2,17 +2,6 @@ import numpy as np
 import scipy as sp
 import time
 
-# Parameters
-m_bb = 0.145 # baseball mass [kg]
-diam_bb = 0.074 # baseball diameter [m]
-acc_g = -9.81 # gravitational acceleration [m/s^2]
-atmDens = 1.2 # Air density [kg/m^3]
-dragC = 0.35  # drag coefficient
-hitHeight = 1 # ball is hit from starting height of 1m
-
-# Computes cross sectional area of the baseball [m^2]
-AreaX_bb = 0.25*np.pi*diam_bb**2
-
 # part 1
 
 # solve the projectile problem by writing a Python function that implements the Euler, Euler-Cromer and Midpoint methods 
@@ -32,17 +21,29 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
     tau = tstep
     stepLim = 3000
 
+    # baseball parameters
+    # Parameters
+    m_bb = 0.145 # baseball mass [kg]
+    diam_bb = 0.074 # baseball diameter [m]
+    acc_g = -9.81 # gravitational acceleration [m/s^2]
+    atmDens = 1.2 # Air density [kg/m^3]
+    dragC = 0.35  # drag coefficient
+    hitHeight = 1 # ball is hit from starting height of 1m
+
+    # Computes cross sectional area of the baseball [m^2]
+    AreaX_bb = 0.25*np.pi*diam_bb**2
+
+    # calculating the air constant for later use in a formula for cases with air resistance
+    airConst = -0.5*dragC*atmDens*AreaX_bb/m_bb
+
     # Setting initial position and velocity
     r0 = [0,hitHeight] #x0, y0
     v0 = [np.cos(ang0*np.pi/180)*v_launch,np.sin(ang0*np.pi/180)*v_launch] #Vx0, Vy0
     
-
     # Setting initial values of time steppable r and v to initial values
     r = r0
     v = v0
 
-    print(r)
-    print(v)
     # x initialization
     xPos = np.empty(stepLim)
 
@@ -50,8 +51,6 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
     yPos = np.empty(stepLim)
     yPos[0] = hitHeight
 
-    # calculating the air constant for later use in a formula
-    airConst = -0.5*dragC*atmDens*AreaX_bb/m_bb
 
     if method == 'Euler':
         # Perform numerical analysis with Euler's Method
@@ -59,7 +58,6 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
             # Do calculations with Air resistance
             range = 0
             acc = np.zeros(2)
-            i = 1
             while r[1]>=1:
                 acc[0] = airConst*abs(v[0])*v[0]           # air resistance (only acc on x)
                 acc[1] = airConst*abs(v[1])*v[1] + acc_g   # air res and gravity (acc on y)
@@ -68,18 +66,19 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
                 r[1] = r[1] + tau*v[1]       # Euler's method step for position in y
                 v[0] = v[0] + tau*acc[0]     # Euler's method step for velocity in x
                 v[1] = v[1] + tau*acc[1]     # Euler's method step for velocity in y
-                print(v[1])
-                time.sleep(0.5)
                 
-                
-               
-
             print('The ball traveled ',r[0],' meters.')
             return r[0]
         
-        else:
+        elif AirResYN is False:
             # Do calculations w/o Air resistance
-            return 'end value for range'
+            range = 0
+            while r[1]>=1:
+                r[0] = r[0] + tau*v[0]       # Euler's method step for position in x
+                r[1] = r[1] + tau*v[1]       # Euler's method step for position in y
+                v[1] = v[1] + tau*acc_g    # Euler's method step for velocity in y
+            print('The ball traveled ',r[0],' meters.')
+            return r[0]
     
     elif method == 'Euler-Cromer':
         # Perform numerical analysis with Euler-Cromer Method
@@ -100,4 +99,4 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
             # Do calculations w/o Air resistance
             return 'end value for range'
 
-projMotion(50,45,0.5,'Euler',True)
+projMotion(15,45,0.1,'Euler',False)
