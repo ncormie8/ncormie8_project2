@@ -223,7 +223,7 @@ rand_ang0 = np.random.normal(ang0_mean_deg,ang0_stdev_deg,randSize)
 range_out = np.zeros(10)
 a,b,c = 1,2,3
 
-for j in range(randSize-1):
+for j in range(randSize):
     range_out[j], a, b, c, = projMotion(rand_v0[j],rand_ang0[j],0.01,'Midpoint',True)
+    print('Iteration ', j+1,' ',range_out[j], ' m')
 
-print(range_out)
