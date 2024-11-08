@@ -51,14 +51,14 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
     yPos = np.empty(stepLim)
     yPos[0] = hitHeight
 
-
+    ######## Euler method section
     if method == 'Euler':
         # Perform numerical analysis with Euler's Method
         if AirResYN is True:
             # Do calculations with Air resistance
             range = 0
             acc = np.zeros(2)
-            while r[1]>=1:
+            while r[1]>=0:
                 acc[0] = airConst*abs(v[0])*v[0]           # air resistance (only acc on x)
                 acc[1] = airConst*abs(v[1])*v[1] + acc_g   # air res and gravity (acc on y)
 
@@ -73,12 +73,15 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
         elif AirResYN is False:
             # Do calculations w/o Air resistance
             range = 0
-            while r[1]>=1:
+            while r[1]>=0:
                 r[0] = r[0] + tau*v[0]       # Euler's method step for position in x
                 r[1] = r[1] + tau*v[1]       # Euler's method step for position in y
                 v[1] = v[1] + tau*acc_g    # Euler's method step for velocity in y
             print('The ball traveled ',r[0],' meters.')
             return r[0]
+        
+        else:
+            return 'Input Variable for AirResYN was not True or False. Please try again.'
     
     elif method == 'Euler-Cromer':
         # Perform numerical analysis with Euler-Cromer Method
@@ -99,4 +102,4 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
             # Do calculations w/o Air resistance
             return 'end value for range'
 
-projMotion(15,45,0.1,'Euler',False)
+projMotion(15,45,0.1,'Euler',True)
