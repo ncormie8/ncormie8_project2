@@ -241,7 +241,5 @@ for j in range(randSize):
     if range_out_feet[j] >= hr_distance_ft:
         numHRs += 1
 
-ABHR = numHRs/randSize
-print('AB/HR ratio : ', ABHR)
-
-
+ABHR = randSize/numHRs
+print('AB/HR ratio : ', np.round(ABHR,2))
