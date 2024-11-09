@@ -242,4 +242,4 @@ for j in range(randSize):
         numHRs += 1
 
 ABHR = randSize/numHRs
-print('AB/HR ratio : ', np.round(ABHR,2))
+print('AB/HR ratio of RDH: ', np.round(ABHR,2))
