@@ -412,24 +412,23 @@ def projMotionMod(v_launch,ang_launch,tstep,method,AirResYN):
 height_out = np.zeros(randSize)
 height_out_feet = np.zeros(randSize)
 hr_heights_ft = np.arange(0.5,15.5,0.5)
-hr_counters = np.zeros(np.size(hr_heights_ft),dtype=int)
+hr_counters = np.zeros(np.size(hr_heights_ft))
 
-# determining ranges in feet for the number of pairs of randomly generated launch speed and angles
+# determining heights at 400 ft in feet for the number of pairs of randomly generated launch speed and angles
 for k in range(randSize):
     # setting the height output for iteration k equal to the calculated range with
     # initial velocity from rand_v0[j], launch angle from rand_ang0[j], timestep 0.01 s,
     # using the Midpoint method with Air resistance considered
     height_out[k], a, b, c, = projMotionMod(rand_v0[j],rand_ang0[j],0.01,'Midpoint',True)
 
-    #converting the calculated values of range to feet for Homerun evaluation
+    #converting the calculated values of height at 400ft in meters to feet for Homerun evaluation
     height_out_feet[k] = height_out[k]*feet_per_m
 
     for l in range(np.size(hr_heights_ft)):
-
-        # if the range in feet is greater than 400, count 1 homerun
-        if height_out_feet[k] >= hr_distance_ft[l]:
+        # if the height in feet is taller than the index fence height, count 1 hr at the index of that fence height
+        if height_out_feet[k] >= hr_heights_ft[l]:
             hr_counters[l] += 1
 
-# calculating AB/HR ratio and printing to terminal
-
-print('AB/HR ratio of RDH: ', np.round(ABHR,2))        
+# calculating AB/HR ratio for verying fence heights and printing to terminal
+for m in range(hr_heights_ft):
+    print('AB/HR ratio of RDH with fence height ',hr_heights_ft[m],':', np.round(randSize/hr_counters[m],2))        
