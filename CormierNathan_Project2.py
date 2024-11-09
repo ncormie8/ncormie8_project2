@@ -419,10 +419,12 @@ for k in range(randSize):
     # setting the height output for iteration k equal to the calculated range with
     # initial velocity from rand_v0[j], launch angle from rand_ang0[j], timestep 0.01 s,
     # using the Midpoint method with Air resistance considered
-    height_out[k], a, b, c, = projMotionMod(rand_v0[j],rand_ang0[j],0.01,'Midpoint',True)
+    height_out[k], a, b, c, = projMotionMod(rand_v0[k],rand_ang0[k],0.01,'Midpoint',True)
 
     #converting the calculated values of height at 400ft in meters to feet for Homerun evaluation
     height_out_feet[k] = height_out[k]*feet_per_m
+    print(height_out_feet[k])
+    time.sleep(0.5)
 
     for l in range(np.size(hr_heights_ft)):
         # if the height in feet is taller than the index fence height, count 1 hr at the index of that fence height
@@ -430,5 +432,5 @@ for k in range(randSize):
             hr_counters[l] += 1
 
 # calculating AB/HR ratio for verying fence heights and printing to terminal
-for m in range(hr_heights_ft):
-    print('AB/HR ratio of RDH with fence height ',hr_heights_ft[m],':', np.round(randSize/hr_counters[m],2))        
+for m in range(np.size(hr_heights_ft)):
+    print('AB/HR ratio of RDH with fence height ',hr_heights_ft[m],'ft :', np.round(randSize/hr_counters[m],2))        
