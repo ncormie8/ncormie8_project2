@@ -211,9 +211,10 @@ exitspd_mean_ms = 44.704
 exitspd_stdev_ms = 6.7056
 ang0_mean_deg = 45
 ang0_stdev_deg = 10
+hr_distance_ft = 400
 
 # setting size of output random value arrays
-randSize = 10
+randSize = 50
 
 # generating array of random exit speeds and launch angles for testing
 rand_v0 = np.random.normal(exitspd_mean_ms,exitspd_stdev_ms,randSize)
@@ -223,8 +224,10 @@ rand_ang0 = np.random.normal(ang0_mean_deg,ang0_stdev_deg,randSize)
 range_out = np.zeros(randSize)
 range_out_feet = np.zeros(randSize)
 feet_per_m = 3.28084     # conversion value to turn range [m] into range [ft]
+numHRs = 0
 a,b,c = 1,2,3            # arbitrary variables to make extracting ranges easy
 
+# determining ranges in feet for the number of pairs of randomly generated launch speed and angles
 for j in range(randSize):
     # setting the range output for iteration j equal to the calculated range with
     # initial velocity from rand_v0[j], launch angle from rand_ang0[j], timestep 0.01 s,
@@ -233,4 +236,12 @@ for j in range(randSize):
 
     #converting the calculated values of range to feet for Homerun evaluation
     range_out_feet[j] = range_out[j]*feet_per_m
+
+    # if the range in feet is greater than 400, count 1 homerun
+    if range_out_feet[j] >= hr_distance_ft:
+        numHRs += 1
+
+ABHR = numHRs/randSize
+print('AB/HR ratio : ', ABHR)
+
 
