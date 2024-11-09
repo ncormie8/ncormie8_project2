@@ -20,7 +20,7 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
 
     ang0 = ang_launch
     tau = tstep
-    stepLim = 3000
+    stepLim = 6000 # massive step limit so I dont run out of position logging space (within reason)
 
     # baseball parameters
     # Parameters
@@ -219,11 +219,18 @@ randSize = 10
 rand_v0 = np.random.normal(exitspd_mean_ms,exitspd_stdev_ms,randSize)
 rand_ang0 = np.random.normal(ang0_mean_deg,ang0_stdev_deg,randSize)
 
-# initializing empty array to be filled with range values
-range_out = np.zeros(10)
-a,b,c = 1,2,3
+# initializing empty arrays to be filled with range values in m and feet
+range_out = np.zeros(randSize)
+range_out_feet = np.zeros(randSize)
+feet_per_m = 3.28084     # conversion value to turn range [m] into range [ft]
+a,b,c = 1,2,3            # arbitrary variables to make extracting ranges easy
 
 for j in range(randSize):
+    # setting the range output for iteration j equal to the calculated range with
+    # initial velocity from rand_v0[j], launch angle from rand_ang0[j], timestep 0.01 s,
+    # using the Midpoint method with Air resistance considered
     range_out[j], a, b, c, = projMotion(rand_v0[j],rand_ang0[j],0.01,'Midpoint',True)
-    print('Iteration ', j+1,' ',range_out[j], ' m')
+
+    #converting the calculated values of range to feet for Homerun evaluation
+    range_out_feet[j] = range_out[j]*feet_per_m
 
