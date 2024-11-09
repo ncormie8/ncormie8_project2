@@ -411,8 +411,8 @@ def projMotionMod(v_launch,ang_launch,tstep,method,AirResYN):
 # initializing empty arrays to be filled with height values at ~400 ft range in m and ft
 height_out = np.zeros(randSize)
 height_out_feet = np.zeros(randSize)
-hr_heights_ft = np.arange(0.5,15.5,0.5)
-hr_heights_ft_10ABHR = np.arange(0.5,1000,0.5)    # array to test how high a fence would need to be to make RDH have an AB/HR >= 10
+hr_heights_ft = np.arange(0.5*feet_per_m,15.5*feet_per_m,0.5*feet_per_m)           # array for testing how AB/HR ratio changes with increasing fence height
+hr_heights_ft_10ABHR = np.arange(0.5*feet_per_m,1000*feet_per_m,0.5*feet_per_m)    # array to test how high a fence would need to be to make RDH have an AB/HR >= 10
 hr_counters = np.zeros(np.size(hr_heights_ft))
 hr_counters_10ABHR = np.zeros(np.size(hr_heights_ft_10ABHR))
 
@@ -439,22 +439,23 @@ for m in range(np.size(hr_heights_ft)):
 
 
 for n in range(randSize):
-    # setting the height output for iteration k equal to the calculated range with
-    # initial velocity from rand_v0[k], launch angle from rand_ang0[k], timestep 0.01 s,
+    # setting the height output for iteration n equal to the calculated height with
+    # initial velocity from rand_v0[n], launch angle from rand_ang0[n], timestep 0.01 s,
     # using the Midpoint method with Air resistance considered
     height_out[n], a, b, c, = projMotionMod(rand_v0[n],rand_ang0[n],0.01,'Midpoint',True)
 
-    #converting the calculated values of height at 400ft in meters to feet for Homerun evaluation
+    # converting the calculated values of height at 400ft in meters to feet for Homerun evaluation
     height_out_feet[n] = height_out[n]*feet_per_m
 
-    # checking if the height_out[k] at 400ft is greater than our range of fence heights, if so a HR is counted 
+    # checking if the height_out_feet[n] at 400ft is greater than our range of fence heights, if so a HR is counted for that fence height 
     for o in range(np.size(hr_heights_ft_10ABHR)):
         # if the height in feet is taller than the index fence height, count 1 hr at the index of that fence height
         if height_out_feet[n] >= hr_heights_ft_10ABHR[o]:
-            hr_counters_10ABHR[o] += 1   
+            hr_counters_10ABHR[o] += 1
 
+print()
 for p in range(np.size(hr_heights_ft_10ABHR)):
-    ABHR_10 = np.round(randSize/hr_counters[p],2)
+    ABHR_10 = np.round(randSize/hr_counters_10ABHR[p],2)
     if ABHR_10 >= 10:
-        print('Required fence height for AB/HR ratio >= 10 is ', hr_heights_ft_10ABHR[p], ' ft.')
+        print('Required fence height for AB/HR ratio ',np.round(ABHR_10,2),' is ', hr_heights_ft_10ABHR[p], ' ft.')
         break
