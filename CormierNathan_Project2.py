@@ -21,7 +21,7 @@ def projMotion(v_launch,ang_launch,tstep,method,AirResYN):
 
     ang0 = ang_launch
     tau = tstep
-    stepLim = 6000 # massive step limit so I dont run out of position logging space (within reason)
+    stepLim = 10000 # massive step limit so I dont run out of position logging space (within reason)
 
     # baseball parameters
     m_bb = 0.145 # baseball mass [kg]
@@ -243,7 +243,7 @@ for j in range(randSize):
 
 # calculating AB/HR ratio and printing to terminal
 ABHR = randSize/numHRs
-print('AB/HR ratio of RDH: ', np.round(ABHR,2))
+print('AB/HR ratio of RDH Gaussian data: ', np.round(ABHR,2),'\n')
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 # Part 3
@@ -432,11 +432,9 @@ for k in range(randSize):
         if height_out_feet[k] >= hr_heights_ft[l]:
             hr_counters[l] += 1
 
-
 # calculating AB/HR ratio for fence heights from 0.5 ft to 15ft and printing to the terminal 
 for m in range(np.size(hr_heights_ft)):
     print('AB/HR ratio of RDH (fence height = ',hr_heights_ft[m],'ft) :', np.round(randSize/hr_counters[m],2))
-
 
 for n in range(randSize):
     # setting the height output for iteration n equal to the calculated height with
