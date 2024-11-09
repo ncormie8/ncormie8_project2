@@ -243,7 +243,7 @@ for j in range(randSize):
 
 # calculating AB/HR ratio and printing to terminal
 ABHR = randSize/numHRs
-print('AB/HR ratio of RDH Gaussian data: ', np.round(ABHR,2),'\n')
+print('AB/HR ratio of RDH from Gaussian data after',randSize,'iterations:', np.round(ABHR,2),'\n')
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 # Part 3
@@ -434,7 +434,7 @@ for k in range(randSize):
 
 # calculating AB/HR ratio for fence heights from 0.5 ft to 15ft and printing to the terminal 
 for m in range(np.size(hr_heights_ft)):
-    print('AB/HR ratio of RDH (fence height = ',hr_heights_ft[m],'ft) :', np.round(randSize/hr_counters[m],2))
+    print('AB/HR ratio of RDH (fence height = ',np.round(hr_heights_ft[m],3),'ft / ',np.round(hr_heights_ft[m]/feet_per_m,1),' m): ', np.round(randSize/hr_counters[m],2))
 
 for n in range(randSize):
     # setting the height output for iteration n equal to the calculated height with
@@ -455,5 +455,5 @@ print()
 for p in range(np.size(hr_heights_ft_10ABHR)):
     ABHR_10 = np.round(randSize/hr_counters_10ABHR[p],2)
     if ABHR_10 >= 10:
-        print('Required fence height for AB/HR ratio ',np.round(ABHR_10,2),' is ', hr_heights_ft_10ABHR[p], ' ft.')
+        print('Required fence height for AB/HR ratio ',np.round(ABHR_10,2),' is ', np.round(hr_heights_ft_10ABHR[p],3), ' ft.')
         break
